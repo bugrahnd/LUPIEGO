@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
@@ -9,8 +9,9 @@
         :root {
             --primary-orange: #FF7F50; /* Coral */
             --secondary-orange: #FFD700; /* Gold */
-            --dark-purple: #6A057F; /* Dark Violet */
-            --light-purple: #8B5FBF; /* Medium Purple */
+            --dark-purple: #4B0082; /* Indigo - Daha koyu mor */
+            --light-purple: #9370DB; /* Medium Purple - Daha açık mor */
+            --accent-pink: #FF69B4; /* Canlı Pembe - Degradenin ortası için */
             --text-dark: #2C3E50; /* Dark Blue Gray */
             --text-light: #ECF0F1; /* Light Gray */
             --white: #FFFFFF;
@@ -32,6 +33,24 @@
             color: var(--text-dark);
             line-height: 1.6;
             scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+        }
+
+        /* Progress Bar Styles */
+        .progress-container {
+            width: 100%;
+            height: 8px; /* Kalınlaştırılmış bar */
+            background: #eee;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--dark-purple); /* Mor renk */
+            transition: width 0.1s linear;
         }
 
         /* Hero Section */
@@ -61,17 +80,34 @@
         }
 
         .hero h1 {
-            font-size: 5.5rem; /* Larger font */
-            font-weight: 800; /* Bolder font */
+            font-size: 5.5rem;
+            font-weight: 800;
             margin-bottom: 1rem;
-            background: linear-gradient(45deg, var(--white), var(--secondary-orange));
+            margin-top: 8rem;
+            
+            /* LUPİEGO Yazısı İçin Güncellenmiş Stil */
+            background: linear-gradient(90deg, var(--dark-purple), var(--accent-pink), var(--light-purple), var(--accent-pink), var(--dark-purple));
+            background-size: 300% 100%; /* Animasyonun daha geniş bir alanda oynayabilmesi için büyüttük */
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            
             opacity: 0;
             transform: translateY(60px);
-            animation: fadeInUp 1.2s cubic-bezier(0.23, 1, 0.32, 1) 0.5s forwards;
+            /* İki animasyonu birleştirdik: fadeInUp ve gradient-flow */
+            animation: fadeInUp 1.2s cubic-bezier(0.23, 1, 0.32, 1) 0.5s forwards, 
+                       gradient-flow 6s linear infinite alternate; /* 'alternate' eklendi ve süre 6s yapıldı */
             text-shadow: 0 8px 20px var(--shadow-medium);
+        }
+
+        /* Keyframe Animasyonu - Renklerin Akışını Sağlar (Ping-Pong Efekti İçin 'alternate' ile kullanılır) */
+        @keyframes gradient-flow {
+            0% {
+                background-position: 0% 50%; /* Başlangıç pozisyonu */
+            }
+            100% {
+                background-position: 100% 50%; /* Bitiş pozisyonu, renklerin akışını sağlar */
+            }
         }
 
         .hero p {
@@ -185,7 +221,7 @@
         }
 
         .side-image {
-            max-width: 250px;
+            max-width: 350px;
             height: auto;
             opacity: 0;
             transform: translateY(100px) scale(0.7);
@@ -275,12 +311,22 @@
             transform: translateY(0) scale(1) rotateX(0deg) rotateZ(0deg);
         }
 
+        /* Mor Başlık Stilleri */
         .feature-text h2 {
             font-size: 3.5rem; /* Larger heading */
             font-weight: 800; /* Bolder heading */
-            color: var(--text-dark);
+            /* color: var(--dark-purple);  Bu satırı kaldırıyoruz, degrade uygulanacak */
             margin-bottom: 25px;
             line-height: 1.2;
+            text-shadow: 2px 2px 5px var(--shadow-light); /* Hafif gölge */
+
+            /* Gradient Efekti Ekleme */
+            background: linear-gradient(90deg, var(--dark-purple), var(--accent-pink), var(--light-purple), var(--accent-pink), var(--dark-purple));
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-flow 6s linear infinite alternate; /* Lupiego ile aynı animasyonu kullanıyoruz */
         }
 
         .feature-text p {
@@ -308,6 +354,14 @@
             transform: translateY(70px);
             transition: opacity 1s ease-out, transform 1s ease-out;
             text-shadow: 0 8px 20px var(--shadow-strong);
+
+            /* Gradient Efekti Ekleme */
+            background: linear-gradient(90deg, var(--dark-purple), var(--accent-pink), var(--light-purple), var(--accent-pink), var(--dark-purple));
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-flow 6s linear infinite alternate; /* Lupiego ile aynı animasyonu kullanıyoruz */
         }
         .cta-title.is-visible {
             opacity: 1;
@@ -345,8 +399,8 @@
             font-size: 1.2rem;
             box-shadow: 0 20px 50px var(--shadow-medium);
             transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
-                        background 0.3s ease, 
-                        color 0.3s ease;
+                                background 0.3s ease, 
+                                color 0.3s ease;
             opacity: 0;
             transform: translateY(50px);
         }
@@ -459,8 +513,14 @@
     </style>
 </head>
 <body>
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
     <section class="hero">
-        <div class="lupiego-logo">🐺</div>
+        <div class="lupiego-logo">
+            <img src="logo.png" alt="Lupiego Logo" />
+        </div>
         <h1>LUPIEGO</h1>
         <p>Yapay Zeka Destekli Dil Öğrenme Uygulaması</p>
         <div class="scroll-indicator">
@@ -470,12 +530,11 @@
     </section>
 
     <section class="features-section">
-        <!-- Ana Ekran -->
         <div class="feature-module">
             <div class="feature-content">
                 <div class="feature-text">
                     <h2>Kullanıcı Dostu Ana Ekran</h2>
-                    <p>Lupiego'nun sezgisel ana ekranı ile dil öğrenme yolculuğunuza kolayca başlayın. Temiz ve modern tasarımıyla tüm özelliklerimize hızlıca erişin. Günlük hedeflerinizi takip edin, seviyenizi görün ve öğrenme serüveninizi kişiselleştirin. Basit navigasyon ile istediğiniz özelliğe tek dokunuşla ulaşın!</p>
+                    <p>Lupiego'nun sezgisel ana ekranı ile dil öğrenme yolculuğunuza kolayca başlayın. Temiz ve modern tasarımıyla tüm özelliklerimize hızlıca erişin. Günlük hedeflerini takip et, seviyeni gör ve öğrenme serüvenini kişiselleştir. Basit navigasyon ile istediğin özelliğe tek dokunuşla ulaş!</p>
                 </div>
                 <div class="feature-image-wrapper">
                     <img src="main-screen.png" alt="Ana Ekran Görünümü" class="phone">
@@ -483,7 +542,6 @@
             </div>
         </div>
 
-        <!-- Login ve Register -->
         <div class="feature-module">
             <div class="double-image-content">
                 <div class="double-image-sides">
@@ -493,13 +551,12 @@
                 <div class="double-image-center">
                     <div class="feature-text">
                         <h2>Kolay Giriş & Kayıt</h2>
-                        <p>Hızlı ve güvenli kayıt süreciyle Lupiego ailesine katılın! E-posta ile klasik kayıt ya da sosyal medya hesaplarınızla tek tıkla giriş yapabilirsiniz. Kişisel verileriniz güvende, öğrenme deneyiminiz ise tamamen size özel. Kayıt olduktan sonra tüm özelliklerimize sınırsız erişim kazanın!</p>
+                        <p>Hızlı ve güvenli kayıt süreciyle Lupiego ailesine katıl! E-posta ile klasik kayıt ya da sosyal medya hesaplarınla tek tıkla giriş yapabilirsin. Kişisel verilerin güvende, öğrenme deneyimin ise tamamen sana özel. Kayıt olduktan sonra tüm özelliklerimize sınırsız erişim kazan!</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Profil ve Bildirimler -->
         <div class="feature-module">
             <div class="double-image-content">
                 <div class="double-image-sides">
@@ -509,18 +566,17 @@
                 <div class="double-image-center">
                     <div class="feature-text">
                         <h2>Kişisel Profil & Akıllı Bildirimler</h2>
-                        <p>Profilinizde öğrenme istatistiklerinizi, başarılarınızı ve rozet koleksiyonunuzu görüntüleyin. Akıllı bildirim sistemi ile günlük hedeflerinizi kaçırmayın, öğrenme streaklerinizi koruyun ve yeni özelliklerden haberdar olun. Kişiselleştirilmiş hatırlatmalar sayesinde motivasyonunuz her zaman yüksek!</p>
+                        <p>Profilinde öğrenme istatistiklerini, başarılarını ve rozet koleksiyonunu görüntüle. Akıllı bildirim sistemi ile günlük hedeflerini kaçırma, öğrenme streaklerini koru ve yeni özelliklerden haberdar ol. Kişiselleştirilmiş hatırlatmalar sayesinde motivasyonun her zaman yüksek!</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Oyun Sayfası -->
         <div class="feature-module">
             <div class="feature-content">
                 <div class="feature-text">
                     <h2>Eğlenceli Oyun Merkezi</h2>
-                    <p>Dil öğrenmeyi oyuna dönüştüren eğlenceli mini oyunlarımızla sıkılmadan öğrenin! Kelime bulmaca, hızlı çeviri yarışması, telaffuz challange'ı ve daha birçok interaktif oyun. Her oyun farklı dil becerilerinizi geliştirir ve başarılarınızı puanlarla ödüllendirir. Arkadaşlarınızla yarışın, liderlik tablolarında yerinizi alın!</p>
+                    <p>Dil öğrenmeyi oyuna dönüştüren eğlenceli mini oyunlarımızla sıkılmadan öğren! Kelime bulmaca, hızlı çeviri yarışması, telaffuz challange'ı ve daha birçok interaktif oyun. Her oyun farklı dil becerilerini geliştirir ve başarılarını puanlarla ödüllendirir. Arkadaşlarınla yarış, liderlik tablolarında yerini al!</p>
                 </div>
                 <div class="feature-image-wrapper">
                     <img src="game.png" alt="Oyun Merkezi Ekranı" class="phone">
@@ -528,12 +584,11 @@
             </div>
         </div>
 
-        <!-- AI Chatbot -->
         <div class="feature-module">
             <div class="feature-content">
                 <div class="feature-text">
                     <h2>AI Destekli Sohbet Partneri</h2>
-                    <p>Yapay zeka destekli sohbet botumuzla gerçek zamanlı pratik yapın! Doğal dil işleme teknolojisi sayesinde kelime dağarcığınızı geliştirin, telaffuzunuzu düzeltin ve cümle kurma becerilerinizi ilerletin. Her seviyeye uygun sohbetlerle dil öğrenmek hiç bu kadar keyifli olmamıştı. 7/24 erişilebilir kişisel öğretmeniniz!</p>
+                    <p>Yapay zeka destekli sohbet botumuzla gerçek zamanlı pratik yap! Doğal dil işleme teknolojisi sayesinde kelime dağarcığını geliştir, telaffuzunu düzelt ve cümle kurma becerilerini ilerlet. Her seviyeye uygun sohbetlerle dil öğrenmek hiç bu kadar keyifli olmamıştı. 7/24 erişilebilir kişisel öğretmenin!</p>
                 </div>
                 <div class="feature-image-wrapper">
                     <img src="chatbot-mockup.png" alt="AI Sohbet Ekranı" class="phone">
@@ -541,12 +596,11 @@
             </div>
         </div>
 
-        <!-- Flashcard -->
         <div class="feature-module">
             <div class="feature-content">
                 <div class="feature-text">
                     <h2>Akıllı Kelime Kartları</h2>
-                    <p>Bilimsel olarak kanıtlanmış aralıklı tekrar sistemi ile kelime ezberlemek hiç bu kadar etkili olmamıştı! Kişiselleştirilmiş flashcard'lar, görsel destekli öğrenme ve adaptive algoritma ile zorlandığınız kelimeler daha sık, bildiğiniz kelimeler daha az sıklıkta karşınıza çıkar. Binlerce kelimeyi kalıcı olarak öğrenin!</p>
+                    <p>Bilimsel olarak kanıtlanmış aralıklı tekrar sistemi ile kelime ezberlemek hiç bu kadar etkili olmamıştı! Kişiselleştirilmiş flashcard'lar, görsel destekli öğrenme ve adaptive algoritma ile zorlandığın kelimeler daha sık, bildiğin kelimeler daha az sıklıkta karşına çıkar. Binlerce kelimeyi kalıcı olarak öğren!</p>
                 </div>
                 <div class="feature-image-wrapper">
                     <img src="flashcard.png" alt="Kelime Kartları Ekranı" class="phone">
@@ -554,12 +608,11 @@
             </div>
         </div>
 
-        <!-- Çeviri -->
         <div class="feature-module">
             <div class="feature-content">
                 <div class="feature-text">
                     <h2>Anında Akıllı Çeviri</h2>
-                    <p>Lupiego'nun güçlü çeviri motoru ile metinleri, cümleleri ve kelimeleri anında çevirin. Sadece çeviri değil, aynı zamanda bağlam içinde kullanım örnekleri, eş anlamlı kelimeler ve telaffuz rehberi de sunar. Çeviri geçmişinizi saklayın, favorilerinizi işaretleyin ve öğrenme sürecinizde tekrar kullanın. Offline çeviri desteği de mevcut!</p>
+                    <p>Lupiego'nun güçlü çeviri motoru ile metinleri, cümleleri ve kelimeleri anında çevir. Sadece çeviri değil, aynı zamanda bağlam içinde kullanım örnekleri, eş anlamlı kelimeler ve telaffuz rehberi de sunar. Çeviri geçmişini sakla, favorilerini işaretle ve öğrenme sürecinde tekrar kullan. Offline çeviri desteği de mevcut!</p>
                 </div>
                 <div class="feature-image-wrapper">
                     <img src="translate.png" alt="Çeviri Ekranı" class="phone">
@@ -568,23 +621,31 @@
         </div>
     </section>
 
-   <section class="cta-section">
-    <div class="container">
-        <h2 class="cta-title">YAKINDA SİZLERLE!</h2>
-        <p>Yapay zeka destekli en etkili dil öğrenme deneyimine hazır olun</p>
-        <div class="download-buttons">
-            <a href="https://www.linkedin.com/in/bghrndvc/" target="_blank" class="download-btn" style="display: flex; align-items: center; gap: 8px;">
-                <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20" fill="#0A66C2">
-                    <path d="M0 0h24v24H0V0z" fill="none"/>
-                    <path d="M4.98 3.5C4.98 4.88 3.88 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V24h-4V8zm7.5 0h3.8v2.4h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.77 2.65 4.77 6.1V24h-4v-8.3c0-1.98-.04-4.53-2.75-4.53-2.75 0-3.17 2.15-3.17 4.38V24h-4V8z"/>
-                </svg>
-                LinkedIn
-            </a>
+    <section class="cta-section">
+        <div class="container">
+            <h2 class="cta-title">YAKINDA SİZLERLE!</h2>
+            <p>Yapay zeka destekli en etkili dil öğrenme deneyimine hazır olun!</p>
+            <div class="download-buttons">
+                <a href="https://www.linkedin.com/in/bghrndvc/" target="_blank" class="download-btn" style="display: flex; align-items: center; gap: 8px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20" fill="#0A66C2">
+                        <path d="M0 0h24v24H0V0z" fill="none"/>
+                        <path d="M4.98 3.5C4.98 4.88 3.88 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V24h-4V8zm7.5 0h3.8v2.4h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.77 2.65 4.77 6.1V24h-4v-8.3c0-1.98-.04-4.53-2.75-4.53-2.75 0-3.17 2.15-3.17 4.38V24h-4V8z"/>
+                    </svg>
+                    LinkedIn
+                </a>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
     <script>
+        // Sayfa İlerleme Çubuğu Fonksiyonu
+        window.onscroll = function() {
+            var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            var scrolled = (winScroll / height) * 100;
+            document.getElementById("progressBar").style.width = scrolled + "%";
+        };
+
         // Intersection Observer for scroll animations
         const animateOnScroll = (elements, animationClass) => {
             const observerOptions = {
@@ -617,11 +678,9 @@
         // Parallax effect for hero background
         window.addEventListener('scroll', () => {
             const scrolled = window.pageYOffset;
-            const parallaxElement = document.querySelector('.hero::before');
-            const speed = scrolled * 0.5;
-            
-            // Apply parallax transform to hero background
-            document.querySelector('.hero').style.transform = `translateY(${speed}px)`;
+            // Removed parallaxElement as it was trying to target ::before pseudo-element directly via JS
+            // This parallax effect is now applied to the .hero section itself
+            document.querySelector('.hero').style.transform = `translateY(${scrolled * 0.5}px)`;
         });
 
         // Smooth scroll for scroll indicator
