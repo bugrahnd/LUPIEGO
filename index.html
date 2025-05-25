@@ -1,4 +1,4 @@
-  <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
+<!DOCTYPE html> 
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
@@ -156,6 +156,59 @@
             z-index: 2; /* Ensure content is above any background effects */
         }
 
+        /* Double Image Layout for Login/Register and Profile/Notifications */
+        .double-image-content {
+            display: flex;
+            align-items: center;
+            max-width: 1300px;
+            width: 100%;
+            gap: 60px;
+            flex-wrap: wrap;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .double-image-sides {
+            display: flex;
+            gap: 40px;
+            flex: 1;
+            min-width: 400px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .double-image-center {
+            flex: 1;
+            min-width: 400px;
+            text-align: center;
+        }
+
+        .side-image {
+            max-width: 250px;
+            height: auto;
+            opacity: 0;
+            transform: translateY(100px) scale(0.7);
+            transition: opacity 1.2s cubic-bezier(0.23, 1, 0.32, 1), transform 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 0px 0px var(--shadow-medium);
+            border-radius: 20px;
+        }
+
+        .side-image.left {
+            transform: translateY(100px) scale(0.7) rotateZ(-10deg);
+            transition-delay: 0.2s;
+        }
+
+        .side-image.right {
+            transform: translateY(100px) scale(0.7) rotateZ(10deg);
+            transition-delay: 0.4s;
+        }
+
+        .feature-module.is-visible .side-image {
+            opacity: 1;
+            transform: translateY(0) scale(1) rotateZ(0deg);
+        }
+
         .feature-text {
             flex: 1;
             min-width: 400px; /* Larger min-width for text block */
@@ -174,7 +227,7 @@
             /* opacity ve transform değerleri .phone sınıfına taşındı */
             box-shadow: none;
             border-radius: 0;
-            background-color: rgb(300, 300, 300); /* Beyazlığı tamamen kaldırmak için şeffaf yap */
+            background-color: transparent; /* Beyazlığı tamamen kaldırmak için şeffaf yap */
         }
 
         /* Doğrudan .phone img etiketini hedefliyoruz */
@@ -188,10 +241,10 @@
             transition: opacity 1.2s cubic-bezier(0.23, 1, 0.32, 1), transform 1.2s cubic-bezier(0.23, 1, 0.32, 1);
             perspective: 1000px; /* 3D transform için */
             transition-delay: 0.2s; /* Image appears slightly after text */
-            box-shadow: 0px 0px 0px var(--shadow-strong); /* Gölgeyi doğrudan telefona veriyoruz */
-            border-radius: 0; /* Eğer PNG görselin kendi yuvarlak kenarları varsa bu yeterli */
+            box-shadow: 0 0px 0px var(--shadow-strong); /* Gölgeyi doğrudan telefona veriyoruz */
+            border-radius: 20px; /* Eğer PNG görselin kendi yuvarlak kenarları varsa bu yeterli */
             object-fit: contain; /* Görselin belirlenen max-width/height'e sığmasını sağlar */
-            background-color: rgb(300, 300, 300); /* Görselin arkasındaki olası beyazlığı kaldırmak için */
+            background-color: transparent; /* Görselin arkasındaki olası beyazlığı kaldırmak için */
         }
 
         .feature-module.is-visible .feature-text {
@@ -338,7 +391,10 @@
         @media (max-width: 1200px) {
             .feature-text { min-width: 350px; }
             .feature-image-wrapper { min-width: 350px; }
-            .phone { max-width: 350px; } /* Maksimum genişlik atayarak çok büyük görselleri kısıtlayabiliriz */
+            .phone { max-width: 350px; }
+            .double-image-sides { min-width: 350px; }
+            .double-image-center { min-width: 350px; }
+            .side-image { max-width: 200px; }
         }
 
         @media (max-width: 992px) {
@@ -348,6 +404,10 @@
             
             .feature-content { flex-direction: column; text-align: center; gap: 60px; }
             .feature-module:nth-child(even) .feature-content { flex-direction: column; } /* Reset for mobile */
+            
+            .double-image-content { flex-direction: column; text-align: center; gap: 60px; }
+            .double-image-sides { flex-direction: column; gap: 30px; min-width: auto; }
+            .double-image-center { min-width: auto; }
             
             .feature-text, .feature-image-wrapper { 
                 transform: translateY(80px) !important; /* Adjust initial position for vertical flow */
@@ -374,6 +434,7 @@
             .feature-text h2 { font-size: 2.2rem; }
             .feature-text p { font-size: 1.1rem; }
             .phone { max-width: 280px; } 
+            .side-image { max-width: 180px; }
 
             .cta-title { font-size: 2.8rem; }
             .cta-section p { font-size: 1.2rem; }
@@ -390,6 +451,7 @@
             .feature-text h2 { font-size: 1.8rem; }
             .feature-text p { font-size: 1rem; }
             .phone { max-width: 250px; }
+            .side-image { max-width: 150px; }
 
             .cta-title { font-size: 2.2rem; }
             .cta-section p { font-size: 1.1rem; }
@@ -408,54 +470,119 @@
     </section>
 
     <section class="features-section">
+        <!-- Ana Ekran -->
         <div class="feature-module">
             <div class="feature-content">
                 <div class="feature-text">
-                    <h2>AI Destekli Sohbet</h2>
-                    <p>Yapay zeka destekli sohbet botumuzla gerçek zamanlı pratik yapın! Doğal dil işleme teknolojisi sayesinde kelime dağarcığınızı geliştirin, telaffuzunuzu düzeltin ve cümle kurma becerilerinizi ilerletin. Her seviyeye uygun sohbetlerle dil öğrenmek hiç bu kadar keyifli olmamıştı.</p>
+                    <h2>Kullanıcı Dostu Ana Ekran</h2>
+                    <p>Lupiego'nun sezgisel ana ekranı ile dil öğrenme yolculuğunuza kolayca başlayın. Temiz ve modern tasarımıyla tüm özelliklerimize hızlıca erişin. Günlük hedeflerinizi takip edin, seviyenizi görün ve öğrenme serüveninizi kişiselleştirin. Basit navigasyon ile istediğiniz özelliğe tek dokunuşla ulaşın!</p>
                 </div>
                 <div class="feature-image-wrapper">
-                    <img src="chatbot-mockup.png" alt="AI Destekli Sohbet Ekranı" class="phone">
+                    <img src="main-screen.png" alt="Ana Ekran Görünümü" class="phone">
                 </div>
             </div>
         </div>
 
+        <!-- Login ve Register -->
         <div class="feature-module">
-            <div class="feature-content">
-                <div class="feature-text">
-                    <h2>Eğlenceli Kelime Oyunları</h2>
-                    <p>Dil öğrenmeyi eğlenceli hale getiren interaktif kelime oyunlarıyla sıkılmadan yeni kelimeler ezberleyin. Wordle benzeri oyunlar, bulmacalar ve hafıza kartları ile kelime bilginizi test edin ve kalıcı hale getirin. Oyun oynayarak öğrenmenin tadını çıkarın!</p>
+            <div class="double-image-content">
+                <div class="double-image-sides">
+                    <img src="login-screen.png" alt="Giriş Ekranı" class="side-image left">
+                    <img src="register-sreen.png" alt="Kayıt Ekranı" class="side-image right">
                 </div>
-                <div class="feature-image-wrapper">
-                    <img src="wordle-mockup.png" alt="Eğlenceli Kelime Oyunları Ekranı" class="phone">
+                <div class="double-image-center">
+                    <div class="feature-text">
+                        <h2>Kolay Giriş & Kayıt</h2>
+                        <p>Hızlı ve güvenli kayıt süreciyle Lupiego ailesine katılın! E-posta ile klasik kayıt ya da sosyal medya hesaplarınızla tek tıkla giriş yapabilirsiniz. Kişisel verileriniz güvende, öğrenme deneyiminiz ise tamamen size özel. Kayıt olduktan sonra tüm özelliklerimize sınırsız erişim kazanın!</p>
+                    </div>
                 </div>
             </div>
         </div>
 
+        <!-- Profil ve Bildirimler -->
+        <div class="feature-module">
+            <div class="double-image-content">
+                <div class="double-image-sides">
+                    <img src="profil.png" alt="Profil Ekranı" class="side-image left">
+                    <img src="bildirim-screen.png" alt="Bildirimler Ekranı" class="side-image right">
+                </div>
+                <div class="double-image-center">
+                    <div class="feature-text">
+                        <h2>Kişisel Profil & Akıllı Bildirimler</h2>
+                        <p>Profilinizde öğrenme istatistiklerinizi, başarılarınızı ve rozet koleksiyonunuzu görüntüleyin. Akıllı bildirim sistemi ile günlük hedeflerinizi kaçırmayın, öğrenme streaklerinizi koruyun ve yeni özelliklerden haberdar olun. Kişiselleştirilmiş hatırlatmalar sayesinde motivasyonunuz her zaman yüksek!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Oyun Sayfası -->
         <div class="feature-module">
             <div class="feature-content">
                 <div class="feature-text">
-                    <h2>Detaylı İlerleme Takibi</h2>
-                    <p>Öğrenme sürecinizi adım adım takip edin ve ne kadar yol kat ettiğinizi görün. İlerleme raporları, öğrendiğiniz kelimeler ve tamamladığınız dersler ile motivasyonunuzu yüksek tutun. Kişiselleştirilmiş analizlerle eksiklerinizi belirleyin ve kendinizi geliştirin.</p>
+                    <h2>Eğlenceli Oyun Merkezi</h2>
+                    <p>Dil öğrenmeyi oyuna dönüştüren eğlenceli mini oyunlarımızla sıkılmadan öğrenin! Kelime bulmaca, hızlı çeviri yarışması, telaffuz challange'ı ve daha birçok interaktif oyun. Her oyun farklı dil becerilerinizi geliştirir ve başarılarınızı puanlarla ödüllendirir. Arkadaşlarınızla yarışın, liderlik tablolarında yerinizi alın!</p>
                 </div>
                 <div class="feature-image-wrapper">
-                    <img src="progress-mockup.png" alt="Detaylı İlerleme Takibi Ekranı" class="phone">
+                    <img src="game.png" alt="Oyun Merkezi Ekranı" class="phone">
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Chatbot -->
+        <div class="feature-module">
+            <div class="feature-content">
+                <div class="feature-text">
+                    <h2>AI Destekli Sohbet Partneri</h2>
+                    <p>Yapay zeka destekli sohbet botumuzla gerçek zamanlı pratik yapın! Doğal dil işleme teknolojisi sayesinde kelime dağarcığınızı geliştirin, telaffuzunuzu düzeltin ve cümle kurma becerilerinizi ilerletin. Her seviyeye uygun sohbetlerle dil öğrenmek hiç bu kadar keyifli olmamıştı. 7/24 erişilebilir kişisel öğretmeniniz!</p>
+                </div>
+                <div class="feature-image-wrapper">
+                    <img src="chatbot-mockup.png" alt="AI Sohbet Ekranı" class="phone">
+                </div>
+            </div>
+        </div>
+
+        <!-- Flashcard -->
+        <div class="feature-module">
+            <div class="feature-content">
+                <div class="feature-text">
+                    <h2>Akıllı Kelime Kartları</h2>
+                    <p>Bilimsel olarak kanıtlanmış aralıklı tekrar sistemi ile kelime ezberlemek hiç bu kadar etkili olmamıştı! Kişiselleştirilmiş flashcard'lar, görsel destekli öğrenme ve adaptive algoritma ile zorlandığınız kelimeler daha sık, bildiğiniz kelimeler daha az sıklıkta karşınıza çıkar. Binlerce kelimeyi kalıcı olarak öğrenin!</p>
+                </div>
+                <div class="feature-image-wrapper">
+                    <img src="flashcard.png" alt="Kelime Kartları Ekranı" class="phone">
+                </div>
+            </div>
+        </div>
+
+        <!-- Çeviri -->
+        <div class="feature-module">
+            <div class="feature-content">
+                <div class="feature-text">
+                    <h2>Anında Akıllı Çeviri</h2>
+                    <p>Lupiego'nun güçlü çeviri motoru ile metinleri, cümleleri ve kelimeleri anında çevirin. Sadece çeviri değil, aynı zamanda bağlam içinde kullanım örnekleri, eş anlamlı kelimeler ve telaffuz rehberi de sunar. Çeviri geçmişinizi saklayın, favorilerinizi işaretleyin ve öğrenme sürecinizde tekrar kullanın. Offline çeviri desteği de mevcut!</p>
+                </div>
+                <div class="feature-image-wrapper">
+                    <img src="translate.png" alt="Çeviri Ekranı" class="phone">
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="cta-section">
-        <div class="container">
-            <h2 class="cta-title">Hemen İndirin ve Öğrenmeye Başlayın!</h2>
-            <p>Yapay zeka destekli en etkili dil öğrenme deneyimi</p>
-            <div class="download-buttons">
-                <a href="#" class="download-btn">📱 App Store</a>
-                <a href="#" class="download-btn">🤖 Google Play</a>
-                <a href="#" class="download-btn">🌐 Web Versiyonu</a>
-            </div>
+   <section class="cta-section">
+    <div class="container">
+        <h2 class="cta-title">YAKINDA SİZLERLE!</h2>
+        <p>Yapay zeka destekli en etkili dil öğrenme deneyimine hazır olun</p>
+        <div class="download-buttons">
+            <a href="https://www.linkedin.com/in/bghrndvc/" target="_blank" class="download-btn" style="display: flex; align-items: center; gap: 8px;">
+                <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20" fill="#0A66C2">
+                    <path d="M0 0h24v24H0V0z" fill="none"/>
+                    <path d="M4.98 3.5C4.98 4.88 3.88 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V24h-4V8zm7.5 0h3.8v2.4h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.77 2.65 4.77 6.1V24h-4v-8.3c0-1.98-.04-4.53-2.75-4.53-2.75 0-3.17 2.15-3.17 4.38V24h-4V8z"/>
+                </svg>
+                LinkedIn
+            </a>
         </div>
-    </section>
+    </div>
+</section>
 
     <script>
         // Intersection Observer for scroll animations
@@ -470,10 +597,8 @@
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add(animationClass);
-                        // observer.unobserve(entry.target); // Animasyon bir kez oynadıktan sonra gözlemlemeyi bırak (isteğe bağlı)
                     } else {
-                        // Eğer element görünürlükten çıkarsa animasyonu sıfırla (isteğe bağlı)
-                        // Bu sayede scroll yukarı yapıldığında animasyon tekrar oynar.
+                        // Eğer element görünürlükten çıkarsa animasyonu sıfırla
                         entry.target.classList.remove(animationClass);
                     }
                 });
@@ -489,14 +614,21 @@
         // Observe each feature module individually for its internal animations
         animateOnScroll(document.querySelectorAll('.feature-module'), 'is-visible');
 
-
         // Parallax effect for hero background
         window.addEventListener('scroll', () => {
             const scrolled = window.pageYOffset;
-            const heroBg = document.querySelector('.hero::before');
-            if (heroBg) {
-                heroBg.style.transform = `translateY(${scrolled * 0.4}px)`; // Slower parallax for background
-            }
+            const parallaxElement = document.querySelector('.hero::before');
+            const speed = scrolled * 0.5;
+            
+            // Apply parallax transform to hero background
+            document.querySelector('.hero').style.transform = `translateY(${speed}px)`;
+        });
+
+        // Smooth scroll for scroll indicator
+        document.querySelector('.scroll-indicator').addEventListener('click', () => {
+            document.querySelector('.features-section').scrollIntoView({
+                behavior: 'smooth'
+            });
         });
     </script>
 </body>
